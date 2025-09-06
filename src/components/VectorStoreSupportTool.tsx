@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import * as Icons from 'lucide-react'
 import { solutionsSeed } from '../data/solutions'
+import { relatedTickets } from '../data/relatedTickets'
 import { MAX_FILE_SIZE_MB, ALLOWED_TYPES, clientTicket } from '../constants/constants'
 import { classNames, categoryBadgeColor, confidencePillColor } from '../lib/ui'
 
@@ -179,27 +180,51 @@ Support`
 
   return (
     <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold text-gray-900">Support Ticket Analysis</h1>
-          <p className="text-sm text-gray-600">
-            Quickly triage vector-store issues, pick solutions, and draft a ready-to-send reply.
-          </p>
-        </div>
-        <button
-          onClick={generateCustomerResponse}
-          className="inline-flex items-center gap-2 rounded-xl bg-blue-600 text-white px-4 py-2 shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <Icons.MessageCircle className="w-5 h-5" />
-          Generate Response
-        </button>
-      </div>
+      <div className="flex gap-6">
+        <aside className="hidden md:block w-64 shrink-0">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Related Tickets</h2>
+          <ul className="space-y-4">
+            {relatedTickets.map((t) => (
+              <li key={t.id} className="p-3 rounded-xl bg-white border border-gray-200">
+                <p className="text-sm font-medium text-gray-900">{t.id}</p>
+                <p className="text-sm text-gray-700">{t.issue}</p>
+              </li>
+            ))}
+          </ul>
+        </aside>
 
-      {/* Ticket Panel + Response Panel */}
-      <div className={classNames('grid gap-6 transition-all', showResponsePanel ? 'lg:grid-cols-3' : 'lg:grid-cols-1')}>
-        {/* Ticket card */}
-        <div className={classNames('bg-white rounded-2xl border border-gray-200 p-5', showResponsePanel ? 'lg:col-span-2' : 'lg:col-span-1')}>
+        <div className="flex-1">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="space-y-1">
+              <h1 className="text-2xl font-semibold text-gray-900">Support Ticket Analysis</h1>
+              <p className="text-sm text-gray-600">
+                Quickly triage vector-store issues, pick solutions, and draft a ready-to-send reply.
+              </p>
+            </div>
+            <button
+              onClick={generateCustomerResponse}
+              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 text-white px-4 py-2 shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <Icons.MessageCircle className="w-5 h-5" />
+              Generate Response
+            </button>
+          </div>
+
+          {/* Ticket Panel + Response Panel */}
+          <div
+            className={classNames(
+              'grid gap-6 transition-all',
+              showResponsePanel ? 'lg:grid-cols-3' : 'lg:grid-cols-1'
+            )}
+          >
+            {/* Ticket card */}
+            <div
+              className={classNames(
+                'bg-white rounded-2xl border border-gray-200 p-5',
+                showResponsePanel ? 'lg:col-span-2' : 'lg:col-span-1'
+              )}
+            >
           <h2 className="text-lg font-medium text-gray-900 mb-4">Ticket information</h2>
 
           {/* Ticket details */}
@@ -435,15 +460,17 @@ Support`
       </div>
 
       {/* Feedback Summary */}
-      <div className="mt-6">
-        <div className="inline-flex items-center gap-3 rounded-2xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
-          <span className="text-sm text-gray-700">
-            Feedback — Helpful: <span className="font-semibold">{helpfulCount}</span>
-          </span>
-          <span className="text-gray-300">|</span>
-          <span className="text-sm text-gray-700">
-            Not helpful: <span className="font-semibold">{unhelpfulCount}</span>
-          </span>
+        <div className="mt-6">
+          <div className="inline-flex items-center gap-3 rounded-2xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
+            <span className="text-sm text-gray-700">
+              Feedback — Helpful: <span className="font-semibold">{helpfulCount}</span>
+            </span>
+            <span className="text-gray-300">|</span>
+            <span className="text-sm text-gray-700">
+              Not helpful: <span className="font-semibold">{unhelpfulCount}</span>
+            </span>
+          </div>
+        </div>
         </div>
       </div>
     </div>
